@@ -15,11 +15,46 @@ def extract_weight(data):
         return float(weights[0])
     else:
         return None
-    
+
+def conveyor_stop():
+    # Stop both relays to halt the conveyor
+    relay_board.set_relay(1, 0)
+    relay_board.set_relay(2, 0)
+
+def conveyor_forward():
+    # Turn on relay 1 for forward movement
+    relay_board.set_relay(1, 15)
+    relay_board.set_relay(2, 0)
+
+def conveyor_reverse():
+    # Turn on relay 2 for reverse movement
+    relay_board.set_relay(1, 0)
+    relay_board.set_relay(2, 15)
+
+def control_conveyor(weight1, weight2):
+    try:
+        if weight1 is not None and weight2 is not None:
+            if weight1 >= 2 or weight2 >= 2:
+                # Stop conveyor if either box weighs >= 2
+                conveyor_stop()
+            elif weight1 < 0 and weight2 < 0:
+                # Stop conveyor if both scales read < 0
+                conveyor_stop()
+            elif weight1 <= 0 and weight2 <= 0:
+                # Start filling the box on the scale that reads 0
+                conveyor_forward()
+            elif weight1 > 2 and weight2 <= 0:
+                # Start filling the box on the scale that reads 0
+                conveyor_reverse()
+    except Exception as e:
+        print("Error in conveyor control:", e)
+
+
 def control_relay1(weight):
     #time.sleep(5)
     try:
         if weight is not None:
+            '''
             if weight <= 0 and weight2>0:
                 # Stop motor if scale 1 shows negative weight
                 relay_board.set_relay(1, 0)
@@ -32,6 +67,8 @@ def control_relay1(weight):
                 relay_board.set_relay(1, 0)
             elif weight1<=0 and weight2<=0:
                 relay_board.set_relay(1,15)
+                '''
+            control_conveyor(w1,w2)
     except Exception as e:
         print("Error in Relay 1 control:", e)
 
@@ -39,6 +76,7 @@ def control_relay2(weight):# all these section is same as using weight 2
     #time.sleep(5)
     try:
         if weight is not None:
+            '''
             if weight <= 0 and weight1 > 0:
                 # Stop motor if scale 1 shows negative weight
                 relay_board.set_relay(2, 0)
@@ -51,6 +89,8 @@ def control_relay2(weight):# all these section is same as using weight 2
                 relay_board.set_relay( 2, 0)
             elif weight1 >2 and weight2<=0:
                 relay_board.set_relay(2, 15)
+                '''
+            control_conveyor(w1,w2)
     except Exception as e:
         print("Error in Relay 2 control:", e)
 
@@ -72,10 +112,10 @@ def read_serial(port):
             if data:
                 print(f"Data from {port}: {data.decode('utf-8','ignore').strip()}")
                 # Extract weights from data
-                global weight1
-                weight1 = extract_weight(data.decode('utf-8','ignore').strip())
+                global w1
+                w1 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
-                control_relay1(weight1)
+                control_relay1(w1)
                 
 
 def read_serial2(port):
@@ -84,10 +124,10 @@ def read_serial2(port):
             data = ser.readline()
             if data:
                 print(f"Data from {port}: {data.decode('utf-8','ignore').strip()}")
-                global weight2
-                weight2 = extract_weight(data.decode('utf-8','ignore').strip())
+                global w2
+                w2 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
-                control_relay2(weight2)
+                control_relay2(w2)
 
 # Creating threads for each scale
 thread1 = threading.Thread(target=read_serial, args=('/dev/ttySC0',))
