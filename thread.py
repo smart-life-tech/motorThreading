@@ -20,7 +20,7 @@ def control_relay1(weight):
     #time.sleep(5)
     try:
         if weight is not None:
-            if weight < 0:
+            if weight <= 0:
                 # Stop motor if scale 1 shows negative weight
                 relay_board.set_relay(1, 0)
             elif weight > 0 and weight < 2:
@@ -37,7 +37,7 @@ def control_relay2(weight):
     #time.sleep(5)
     try:
         if weight is not None:
-            if weight < 0:
+            if weight <= 0:
                 # Stop motor if scale 1 shows negative weight
                 relay_board.set_relay(2, 0)
             elif  weight > 0 and weight < 2:
