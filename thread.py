@@ -100,7 +100,7 @@ def control_relay(relay_num, state):
         if state:
             relay_board.set_relay(relay_num, 15) # Turn relay on
         else:
-            relay_board.set_relay(relay_num, 0) # Turn relay off
+            relay_board.set_relay(relay_num, 0) # Turn relay off 0
     except Exception as e:
         print("Error in Relay control:", e)
 
