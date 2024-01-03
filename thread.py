@@ -25,7 +25,7 @@ def control_relay1(weight):
                 relay_board.set_relay(1, 0)
             elif weight > 0 and weight < 2:
                 # Turn on relay 1 if scale 1 reads 0
-                relay_board.set_relay(2, 0)#relay 2 is off
+                relay_board.set_relay(2, 0)#relay 2 is offkk
                 relay_board.set_relay(1, 15)
             elif weight >= 2:
                 # Turn off relay 1 if scale 1 reads 2 or more
