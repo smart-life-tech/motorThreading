@@ -34,10 +34,10 @@ def conveyor_reverse():
 def control_conveyor(weight1, weight2):
     try:
         if weight1 is not None and weight2 is not None:
-            if weight1 >= 2 or weight2 >= 2:
+            if weight1 >= 2 and weight2 >= 2:
                 # Stop conveyor if either box weighs >= 2
-                #conveyor_stop()
-                print("greatr than 2")
+                conveyor_stop()
+                #print("greatr than 2")
             elif weight1 < 0 and weight2 < 0:
                 # Stop conveyor if both scales read < 0
                 conveyor_stop()
