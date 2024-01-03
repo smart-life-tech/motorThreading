@@ -17,7 +17,7 @@ def extract_weight(data):
         return None
     
 def control_relay1(weight):
-    time.sleep(5)
+    #time.sleep(5)
     try:
         if weight is not None:
             if weight < 0:
@@ -34,7 +34,7 @@ def control_relay1(weight):
         print("Error in Relay 1 control:", e)
 
 def control_relay2(weight):
-    time.sleep(5)
+    #time.sleep(5)
     try:
         if weight is not None:
             if weight < 0:
