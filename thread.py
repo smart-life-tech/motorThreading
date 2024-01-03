@@ -66,9 +66,9 @@ def read_serial(port):
         while True:
             data = ser.readline()
             if data:
-                print(f"Data from {port}: {data.decode().strip()}")
+                print(f"Data from {port}: {data.decode('utf-8','ignore').strip()}")
                 # Extract weights from data
-                weight1 = extract_weight(data.decode().strip())
+                weight1 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
                 control_relay1(weight1)
                 
@@ -78,8 +78,8 @@ def read_serial2(port):
         while True:
             data = ser.readline()
             if data:
-                print(f"Data from {port}: {data.decode().strip()}")
-                weight2 = extract_weight(data.decode().strip())
+                print(f"Data from {port}: {data.decode('utf-8','ignore').strip()}")
+                weight2 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
                 control_relay2(weight2)
 
