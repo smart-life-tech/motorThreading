@@ -35,7 +35,7 @@ def control_relay1(weight):
     except Exception as e:
         print("Error in Relay 1 control:", e)
 
-def control_relay2(weight):
+def control_relay2(weight):# all these section is same as using weight 2
     #time.sleep(5)
     try:
         if weight is not None:
