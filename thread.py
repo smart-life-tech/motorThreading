@@ -48,7 +48,9 @@ def control_relay2(weight):
                 relay_board.set_relay(2, 15)
             elif weight >= 2:
                 # Turn off relay 2 if scale 2 reads 2 or more
-                relay_board.set_relay(2, 0)
+                relay_board.set_relay( 2, 0)
+            elif weight1 >2 and weight2<=0:
+                relay_board.set_relay(2, 15)
     except Exception as e:
         print("Error in Relay 2 control:", e)
 
