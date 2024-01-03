@@ -20,7 +20,7 @@ def control_relay1(weight):
     #time.sleep(5)
     try:
         if weight is not None:
-            if weight <= 0:
+            if weight <= 0 and weight2>0:
                 # Stop motor if scale 1 shows negative weight
                 relay_board.set_relay(1, 0)
             elif weight > 0 and weight < 2:
@@ -30,6 +30,8 @@ def control_relay1(weight):
             elif weight >= 2:
                 # Turn off relay 1 if scale 1 reads 2 or more
                 relay_board.set_relay(1, 0)
+            elif weight1<=0 and weight2<=0:
+                relay_board.set_relay(1,15)
     except Exception as e:
         print("Error in Relay 1 control:", e)
 
@@ -37,7 +39,7 @@ def control_relay2(weight):
     #time.sleep(5)
     try:
         if weight is not None:
-            if weight <= 0:
+            if weight <= 0 and weight1 > 0:
                 # Stop motor if scale 1 shows negative weight
                 relay_board.set_relay(2, 0)
             elif  weight > 0 and weight < 2:
@@ -68,6 +70,7 @@ def read_serial(port):
             if data:
                 print(f"Data from {port}: {data.decode('utf-8','ignore').strip()}")
                 # Extract weights from data
+                global weight1
                 weight1 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
                 control_relay1(weight1)
@@ -79,6 +82,7 @@ def read_serial2(port):
             data = ser.readline()
             if data:
                 print(f"Data from {port}: {data.decode('utf-8','ignore').strip()}")
+                global weight2
                 weight2 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
                 control_relay2(weight2)
