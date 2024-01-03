@@ -36,11 +36,12 @@ def control_conveyor(weight1, weight2):
         if weight1 is not None and weight2 is not None:
             if weight1 >= 2 or weight2 >= 2:
                 # Stop conveyor if either box weighs >= 2
-                conveyor_stop()
+                #conveyor_stop()
+                print("greatr than 2")
             elif weight1 < 0 and weight2 < 0:
                 # Stop conveyor if both scales read < 0
                 conveyor_stop()
-            elif weight1 <= 0 and weight2 > 2:
+            elif weight1 <= 0 and weight2 > 0:
                 # Start filling the box on the scale that reads 0
                 conveyor_forward()
             elif weight1 > 2 and weight2 <= 0:
@@ -100,7 +101,7 @@ def control_relay(relay_num, state):
         if state:
             relay_board.set_relay(relay_num, 15) # Turn relay on
         else:
-            relay_board.set_relay(relay_num, 0) # Turn relay off 0
+            relay_board.set_relay(relay_num, 0) # Turn relay off
     except Exception as e:
         print("Error in Relay control:", e)
 
