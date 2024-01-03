@@ -17,27 +17,34 @@ def extract_weight(data):
         return None
     
 def control_relay1(weight):
+    time.sleep(5)
     try:
         if weight is not None:
             if weight < 0:
                 # Stop motor if scale 1 shows negative weight
                 relay_board.set_relay(1, 0)
-            elif weight == 0:
+            elif weight > 0 and weight < 2:
                 # Turn on relay 1 if scale 1 reads 0
+                relay_board.set_relay(2, 0)#relay 2 is off
                 relay_board.set_relay(1, 15)
-            else:
+            elif weight >= 2:
                 # Turn off relay 1 if scale 1 reads 2 or more
                 relay_board.set_relay(1, 0)
     except Exception as e:
         print("Error in Relay 1 control:", e)
 
 def control_relay2(weight):
+    time.sleep(5)
     try:
         if weight is not None:
-            if weight == 0:
+            if weight < 0:
+                # Stop motor if scale 1 shows negative weight
+                relay_board.set_relay(2, 0)
+            elif  weight > 0 and weight < 2:
                 # Turn on relay 2 if scale 2 reads 0
+                relay_board.set_relay(1, 0)#relay 1 is off
                 relay_board.set_relay(2, 15)
-            else:
+            elif weight >= 2:
                 # Turn off relay 2 if scale 2 reads 2 or more
                 relay_board.set_relay(2, 0)
     except Exception as e:
