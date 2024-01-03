@@ -38,7 +38,7 @@ def control_conveyor(weight1, weight2):
                 # Stop conveyor if either box weighs >= 2
                 conveyor_stop()
                 #print("greatr than 2")
-            elif weight1 < 0 and weight2 < 0:
+            elif weight1 < 0.0 and weight2 < 0.0:
                 # Stop conveyor if both scales read < 0
                 conveyor_stop()
             elif weight1 == 0 and weight2 == 0:
