@@ -1,4 +1,5 @@
 import re
+import time
 def control_conveyor(weight1, weight2):
     try:
         if weight1 is not None and weight2 is not None:
@@ -22,7 +23,7 @@ def control_conveyor(weight1, weight2):
             
     except Exception as e:
         print("Error in conveyor control:", e)
-
+print(time.time())
 w1= str(input(" enter for weight 1 : "))
 w1=(re.findall(r'-?\s*\d+\.\d+|-?\s*\d+', w1))
 w1=float(w1[0].replace(' ', ''))
