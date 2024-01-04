@@ -22,7 +22,7 @@ def extract_weight(data):
 
 def conveyor_stop():
     global terminate_threads
-    terminate_threads = False
+    terminate_threads = True
     # Stop both relays to halt the conveyor
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 0)
@@ -83,11 +83,10 @@ def control_conveyor(weight1, weight2):
         print("Error in conveyor control:", e)
 
 def control_relay4():
-    global conveyor_stop_time
     global terminate_threads
-    #terminate_threads = False
+    terminate_threads = True
     try:
-        while not terminate_threads:
+        while  terminate_threads:
             elapsed_time = time.time() - conveyor_stop_time 
             if elapsed_time >= 30:
                 # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
