@@ -25,6 +25,17 @@ def conveyor_stop():
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 0)
     relay_board.set_relay(3, 15)
+
+    elapsed_time = time.time() - conveyor_stop_time 
+    if elapsed_time >= 30:
+        conveyor_stop_time=time.time()
+        # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
+        relay_board.set_relay(4, 15)
+        time.sleep(2)
+        relay_board.set_relay(4, 0)
+        time.sleep(2)
+        relay_board.set_relay(4, 15)
+        time.sleep(2)
    
 
 def conveyor_forward():
@@ -81,27 +92,6 @@ def control_conveyor(weight1, weight2):
             
     except Exception as e:
         print("Error in conveyor control:", e)
-
-def control_relay4():
-    terminate_threads = True
-    try:
-        while  terminate_threads:
-            elapsed_time = time.time() - conveyor_stop_time 
-            if elapsed_time >= 30:
-                conveyor_stop_time=time.time()
-                # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
-                relay_board.set_relay(4, 15)
-                time.sleep(2)
-                relay_board.set_relay(4, 0)
-                time.sleep(2)
-                relay_board.set_relay(4, 15)
-                time.sleep(2)
-                # Reset conveyor stop time
-                terminate_threads=True
-    
-    except Exception as e:
-        print("Error in Relay 4 control:", e)
-
 
 def control_relay1(weight):
     #time.sleep(5)
@@ -185,15 +175,12 @@ def read_serial2(port):
 # Creating threads for each scale
 thread1 = threading.Thread(target=read_serial, args=('/dev/ttySC0',))
 thread2 = threading.Thread(target=read_serial2, args=('/dev/ttySC1',))
-# Creating a thread for relay 4 control
-thread4 = threading.Thread(target=control_relay4)
+
 
 # Starting threads
 thread1.start()
 thread2.start()
-thread4.start()
 
 # Joining threads to the main thread
 thread1.join()
 thread2.join()
-thread4.join()
