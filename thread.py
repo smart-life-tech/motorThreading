@@ -20,6 +20,7 @@ def conveyor_stop():
     # Stop both relays to halt the conveyor
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 0)
+    relay_board.set_relay(3, 15)
 
 def conveyor_forward():
     # Turn on relay 1 for forward movement
