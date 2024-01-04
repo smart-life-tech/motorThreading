@@ -5,7 +5,11 @@ import time
 import re
 # Setup relay board
 relay_board = rel.SM4rel4in()
+# Global flag to signal threads to stop
+terminate_threads = False
 
+# Global variable to track the time the conveyor stopped
+conveyor_stop_time = None
 
 def extract_weight(data):
     # Use regular expression to find the weight in the data string
@@ -17,10 +21,12 @@ def extract_weight(data):
         return None
 
 def conveyor_stop():
+    global conveyor_stop_time
     # Stop both relays to halt the conveyor
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 0)
     relay_board.set_relay(3, 15)
+    conveyor_stop_time = time.time()
 
 def conveyor_forward():
     # Turn on relay 1 for forward movement
@@ -36,6 +42,7 @@ def conveyor_reverse():
 
 def control_conveyor(weight1, weight2):
     try:
+        global conveyor_stop_time
         if weight1 is not None and weight2 is not None:
             if weight1 >= 2 and weight2 >= 2:
                 # Stop conveyor if either box weighs >= 2
@@ -69,6 +76,27 @@ def control_conveyor(weight1, weight2):
             
     except Exception as e:
         print("Error in conveyor control:", e)
+
+def control_relay4():
+    global conveyor_stop_time
+    try:
+        while not terminate_threads:
+            elapsed_time = time.time() - conveyor_stop_time if conveyor_stop_time else 0
+            if elapsed_time >= 30:
+                # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
+                relay_board.set_relay(4, 15)
+                time.sleep(2)
+                relay_board.set_relay(4, 0)
+                time.sleep(2)
+                relay_board.set_relay(4, 15)
+                time.sleep(2)
+                # Reset conveyor stop time
+                conveyor_stop_time = None
+            else:
+                # Sleep for a short interval
+                time.sleep(1)
+    except Exception as e:
+        print("Error in Relay 4 control:", e)
 
 
 def control_relay1(weight):
@@ -153,11 +181,15 @@ def read_serial2(port):
 # Creating threads for each scale
 thread1 = threading.Thread(target=read_serial, args=('/dev/ttySC0',))
 thread2 = threading.Thread(target=read_serial2, args=('/dev/ttySC1',))
+# Creating a thread for relay 4 control
+thread4 = threading.Thread(target=control_relay4)
 
 # Starting threads
 thread1.start()
 thread2.start()
+thread4.start()
 
 # Joining threads to the main thread
 thread1.join()
 thread2.join()
+thread4.join()
