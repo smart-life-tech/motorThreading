@@ -9,7 +9,7 @@ relay_board = rel.SM4rel4in()
 terminate_threads = False
 
 # Global variable to track the time the conveyor stopped
-conveyor_stop_time = None
+conveyor_stop_time = time.time()
 
 def extract_weight(data):
     # Use regular expression to find the weight in the data string
@@ -21,8 +21,6 @@ def extract_weight(data):
         return None
 
 def conveyor_stop():
-    global terminate_threads
-    terminate_threads = True
     # Stop both relays to halt the conveyor
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 0)
@@ -32,9 +30,10 @@ def conveyor_stop():
 def conveyor_forward():
     global conveyor_stop_time
     # Turn on relay 1 for forward movement
-    relay_board.set_relay(1, 15)
     relay_board.set_relay(2, 0)
+    relay_board.set_relay(1, 15)
     relay_board.set_relay(3, 0)
+    relay_board.set_relay(2, 0)
     conveyor_stop_time = time.time()
 
 def conveyor_reverse():
@@ -43,6 +42,7 @@ def conveyor_reverse():
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 15)
     relay_board.set_relay(3, 0)
+    relay_board.set_relay(1, 0)
     conveyor_stop_time = time.time()
 
 def control_conveyor(weight1, weight2):
@@ -83,12 +83,12 @@ def control_conveyor(weight1, weight2):
         print("Error in conveyor control:", e)
 
 def control_relay4():
-    global terminate_threads
     terminate_threads = True
     try:
         while  terminate_threads:
             elapsed_time = time.time() - conveyor_stop_time 
             if elapsed_time >= 30:
+                conveyor_stop_time=time.time()
                 # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
                 relay_board.set_relay(4, 15)
                 time.sleep(2)
@@ -97,7 +97,6 @@ def control_relay4():
                 relay_board.set_relay(4, 15)
                 time.sleep(2)
                 # Reset conveyor stop time
-                conveyor_stop_time = None
                 terminate_threads=True
     
     except Exception as e:
