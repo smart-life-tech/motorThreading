@@ -32,21 +32,26 @@ def reset(dir):
 
 def conveyor_stop():
     global conveyor_stop_time
+    global toggle
     # Stop both relays to halt the conveyor
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 0)
     relay_board.set_relay(3, 15)
 
     elapsed_time = time.time() - conveyor_stop_time 
-    if elapsed_time >= 30:
-        #conveyor_stop_time=time.time()
-        # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
-        relay_board.set_relay(4, 15)
-        time.sleep(2)
-        relay_board.set_relay(4, 0)
-        time.sleep(2)
-        relay_board.set_relay(4, 15)
-        time.sleep(2)
+    if elapsed_time >= 30 and toggle:
+        conveyor_stop_time=time.time()
+        for i in range(2):
+            # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
+            relay_board.set_relay(4, 15)
+            time.sleep(2)
+            relay_board.set_relay(4, 0)
+            time.sleep(2)
+            relay_board.set_relay(4, 15)
+            time.sleep(2)
+            relay_board.set_relay(4, 0)
+            time.sleep(2)
+        #toggle =False
    
 
 def conveyor_forward():
@@ -82,6 +87,8 @@ def control_conveyor(weight1, weight2):
                 # Stop conveyor if both scales read < 0
                 #conveyor_stop()
                 #reset(backward)
+                global toggle
+                toggle = True
                 conveyor_reverse()
             elif weight1 == 0 and weight2 > 2:
                 # Start filling the box on the scale that reads 0
