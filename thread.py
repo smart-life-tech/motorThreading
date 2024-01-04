@@ -7,7 +7,8 @@ import re
 relay_board = rel.SM4rel4in()
 # Global flag to signal threads to stop
 terminate_threads = False
-
+forward=1
+backward=0
 # Global variable to track the time the conveyor stopped
 conveyor_stop_time = time.time()
 
@@ -19,6 +20,14 @@ def extract_weight(data):
         return float(weights[0].replace(' ', ''))
     else:
         return None
+
+def reset(dir):
+    if dir:
+        if relay_board.get_relay(1):
+            relay_board.set_relay(1, 0)
+    else:
+        if relay_board.get_relay(2):
+            relay_board.set_relay(2, 0)
 
 def conveyor_stop():
     # Stop both relays to halt the conveyor
@@ -58,7 +67,7 @@ def conveyor_reverse():
 
 def control_conveyor(weight1, weight2):
     try:
-        global conveyor_stop_time
+        #global conveyor_stop_time
         if weight1 is not None and weight2 is not None:
             if weight1 >= 2 and weight2 >= 2:
                 # Stop conveyor if either box weighs >= 2
@@ -70,18 +79,23 @@ def control_conveyor(weight1, weight2):
             elif weight1 == 0 and weight2 == 0:
                 # Stop conveyor if both scales read < 0
                 #conveyor_stop()
+                reset(backward)
                 conveyor_reverse()
             elif weight1 == 0 and weight2 > 2:
                 # Start filling the box on the scale that reads 0
+                reset(forward)
                 conveyor_forward()
             elif weight1 > 2 and weight2 == 0:
                 # Start filling the box on the scale that reads 0
+                reset(backward)
                 conveyor_reverse()
             elif weight1 == 0 and weight2 < 0:
                 # move toward box on the scale that reads 0
+                reset(forward)
                 conveyor_forward()
             elif weight1 <0 and weight2 ==0:
                 # move towards the box on the scale that reads 0
+                reset(backward)
                 conveyor_reverse()
             elif weight1 <0 and weight2 >2:
                 # Stop filling the box on the scale that reads >2
