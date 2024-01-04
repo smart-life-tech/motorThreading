@@ -51,6 +51,12 @@ def control_conveyor(weight1, weight2):
             elif weight1 > 2 and weight2 <= 0:
                 # Start filling the box on the scale that reads 0
                 conveyor_reverse()
+            elif weight1 == 0 and weight2 < 0:
+                # move toward box on the scale that reads 0
+                conveyor_forward()
+            elif weight1 <0 and weight2 ==0:
+                # move towards the box on the scale that reads 0
+                conveyor_reverse()
             
     except Exception as e:
         print("Error in conveyor control:", e)
