@@ -81,23 +81,23 @@ def control_conveyor(weight1, weight2):
             elif weight1 == 0 and weight2 == 0:
                 # Stop conveyor if both scales read < 0
                 #conveyor_stop()
-                reset(backward)
+                #reset(backward)
                 conveyor_reverse()
             elif weight1 == 0 and weight2 > 2:
                 # Start filling the box on the scale that reads 0
-                reset(forward)
+                #reset(forward)
                 conveyor_forward()
             elif weight1 > 2 and weight2 == 0:
                 # Start filling the box on the scale that reads 0
-                reset(backward)
+                #reset(backward)
                 conveyor_reverse()
             elif weight1 == 0 and weight2 < 0:
                 # move toward box on the scale that reads 0
-                reset(forward)
+                #reset(forward)
                 conveyor_forward()
             elif weight1 <0 and weight2 ==0:
                 # move towards the box on the scale that reads 0
-                reset(backward)
+                #reset(backward)
                 conveyor_reverse()
             elif weight1 <0 and weight2 >2:
                 # Stop filling the box on the scale that reads >2
