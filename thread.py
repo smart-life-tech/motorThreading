@@ -39,7 +39,7 @@ def conveyor_stop():
     relay_board.set_relay(3, 15)
 
     elapsed_time = time.time() - conveyor_stop_time 
-    if elapsed_time >= 30 and toggle:
+    if elapsed_time >= 30 :
         conveyor_stop_time=time.time()
         for i in range(2):
             # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
