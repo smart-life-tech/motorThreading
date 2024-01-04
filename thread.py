@@ -26,11 +26,13 @@ def conveyor_forward():
     # Turn on relay 1 for forward movement
     relay_board.set_relay(1, 15)
     relay_board.set_relay(2, 0)
+    relay_board.set_relay(3, 0)
 
 def conveyor_reverse():
     # Turn on relay 2 for reverse movement
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 15)
+    relay_board.set_relay(3, 0)
 
 def control_conveyor(weight1, weight2):
     try:
