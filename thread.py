@@ -9,7 +9,7 @@ relay_board = rel.SM4rel4in()
 
 def extract_weight(data):
     # Use regular expression to find the weight in the data string
-    weights = re.findall(r'\d+\.\d+|\d+', data)
+    weights = re.findall(r'-?\d+\.\d+|-?\d+', data)
     
     if weights:
         return float(weights[0])
