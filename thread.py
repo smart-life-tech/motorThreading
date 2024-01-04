@@ -84,6 +84,8 @@ def control_conveyor(weight1, weight2):
 
 def control_relay4():
     global conveyor_stop_time
+    global terminate_threads
+    #terminate_threads = False
     try:
         while not terminate_threads:
             elapsed_time = time.time() - conveyor_stop_time 
