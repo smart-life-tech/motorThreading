@@ -7,7 +7,6 @@ import re
 ports = ['/dev/ttySC0', '/dev/ttySC1']
 # Global flag to signal the loop to continue
 terminate_loop = False
-
 # Setup relay board
 relay_board = rel.SM4rel4in()
 # Global flag to signal threads to stop
@@ -211,33 +210,22 @@ def read_serial2(port):
                 control_relay2(w2)
 
 def monitorrelay3():
-   # Main loop
-    global w1,w2
-    while not terminate_loop:
-        for port in ports:
-            with serial.Serial(port, baudrate=9600, timeout=1) as ser:
-                data = ser.readline()
-                if data:
-                    print(f"Data from {port}: {data.decode('utf-8','ignore').strip()}")
-                    weight = extract_weight(data.decode('utf-8','ignore').strip())
-                    if port == '/dev/ttySC0':
-                        w1=weight
-                        control_relay2(w1)
-                    elif port == '/dev/ttySC1':
-                        w2=weight
-                        control_relay2(w2)
-                        
+    if not relay_board.get_relay(1) and not relay_board.get_relay(2):
+        relay_board.set_relay(3, 1)
+    else :
+        relay_board.set_relay(3, 0)
 # Creating threads for each scale
-#thread1 = threading.Thread(target=read_serial, args=('/dev/ttySC0',))
-#thread2 = threading.Thread(target=read_serial2, args=('/dev/ttySC1',))
+thread1 = threading.Thread(target=read_serial, args=('/dev/ttySC0',))
+thread2 = threading.Thread(target=read_serial2, args=('/dev/ttySC1',))
 thread3=threading.Thread(target=monitorrelay3)
 
 # Starting threads
-#thread1.start()
-#thread2.start()
-thread3.start()
-
+thread1.start()
 # Joining threads to the main thread
-#thread1.join()
-#thread2.join()
+thread1.join()
+
+thread2.start()
+thread2.join()
+
+thread3.start()
 thread3.join()
