@@ -3,6 +3,11 @@ import threading
 import sm_4rel4in as rel
 import time
 import re
+# Serial ports
+ports = ['/dev/ttySC0', '/dev/ttySC1']
+# Global flag to signal the loop to continue
+terminate_loop = False
+
 # Setup relay board
 relay_board = rel.SM4rel4in()
 # Global flag to signal threads to stop
@@ -32,7 +37,7 @@ def reset(dir):
 
 def conveyor_stop():
     global conveyor_stop_time
-    global toggle
+    global secondOrder
     # Stop both relays to halt the conveyor
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 0)
@@ -41,7 +46,8 @@ def conveyor_stop():
     elapsed_time = time.time() - conveyor_stop_time 
     if elapsed_time >= 45 :
         conveyor_stop_time=time.time()
-        for i in range(2):
+        if not secondOrder:
+            secondOrder =True
             # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
             relay_board.set_relay(4, 15)
             time.sleep(2)
@@ -51,25 +57,33 @@ def conveyor_stop():
             time.sleep(2)
             relay_board.set_relay(4, 0)
             time.sleep(2)
-        #toggle =False
+        elif secondOrder:
+            relay_board.set_relay(4, 15)
+        
    
 
 def conveyor_forward():
     global conveyor_stop_time
+    global secondOrder
     # Turn on relay 1 for forward movement
     relay_board.set_relay(2, 0)
     relay_board.set_relay(1, 15)
     relay_board.set_relay(3, 0)
     relay_board.set_relay(2, 0)
+    relay_board.set_relay(4, 0)
+    secondOrder =False
     conveyor_stop_time = time.time()
 
 def conveyor_reverse():
     global conveyor_stop_time
+    global secondOrder
     # Turn on relay 2 for reverse movement
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 15)
     relay_board.set_relay(3, 0)
     relay_board.set_relay(1, 0)
+    relay_board.set_relay(4, 0)
+    secondOrder =False
     conveyor_stop_time = time.time()
 
 def control_conveyor(weight1, weight2):
@@ -197,21 +211,33 @@ def read_serial2(port):
                 control_relay2(w2)
 
 def monitorrelay3():
-    if not relay_board.get_relay(1) and not relay_board.get_relay(2):
-        relay_board.set_relay(3, 1)
-    else :
-        relay_board.set_relay(3, 0)
+   # Main loop
+    global w1,w2
+    while not terminate_loop:
+        for port in ports:
+            with serial.Serial(port, baudrate=9600, timeout=1) as ser:
+                data = ser.readline()
+                if data:
+                    print(f"Data from {port}: {data.decode('utf-8','ignore').strip()}")
+                    weight = extract_weight(data.decode('utf-8','ignore').strip())
+                    if port == '/dev/ttySC0':
+                        w1=weight
+                        control_relay2(w1)
+                    elif port == '/dev/ttySC1':
+                        w2=weight
+                        control_relay2(w2)
+                        
 # Creating threads for each scale
-thread1 = threading.Thread(target=read_serial, args=('/dev/ttySC0',))
-thread2 = threading.Thread(target=read_serial2, args=('/dev/ttySC1',))
+#thread1 = threading.Thread(target=read_serial, args=('/dev/ttySC0',))
+#thread2 = threading.Thread(target=read_serial2, args=('/dev/ttySC1',))
 thread3=threading.Thread(target=monitorrelay3)
 
 # Starting threads
-thread1.start()
-thread2.start()
+#thread1.start()
+#thread2.start()
 thread3.start()
 
 # Joining threads to the main thread
-thread1.join()
-thread2.join()
+#thread1.join()
+#thread2.join()
 thread3.join()
