@@ -221,11 +221,10 @@ thread3=threading.Thread(target=monitorrelay3)
 
 # Starting threads
 thread1.start()
+thread2.start()
+thread3.start()
+
 # Joining threads to the main thread
 thread1.join()
-
-thread2.start()
 thread2.join()
-
-thread3.start()
 thread3.join()
