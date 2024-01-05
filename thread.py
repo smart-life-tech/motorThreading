@@ -41,7 +41,7 @@ def conveyor_stop():
     relay_board.set_relay(1, 0)
     relay_board.set_relay(2, 0)
     relay_board.set_relay(3, 15)
-
+    
     elapsed_time = time.time() - conveyor_stop_time 
     if elapsed_time >= 45 :
         conveyor_stop_time=time.time()
@@ -132,7 +132,7 @@ def control_conveyor(weight1, weight2):
 
 def control_relay1(weight):
     #time.sleep(5)
-    global w1,w2
+    #global w1,w2
     try:
         if weight is not None:
             '''
@@ -197,7 +197,7 @@ def read_serial(port):
                 global w1
                 w1 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
-                #control_relay1(w1)
+                control_relay1(w1)
                 #break
                 
 
