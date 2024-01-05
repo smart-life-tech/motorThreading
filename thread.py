@@ -24,11 +24,11 @@ def extract_weight(data):
 
 def reset(dir):
     if dir:
-        if relay_board.get_relay(1):
-            relay_board.set_relay(1, 0)
+        if relay_board.get_relay(1):#if relay 1 is on tuen relay 2 off
+            relay_board.set_relay(2, 0)
     else:
         if relay_board.get_relay(2):
-            relay_board.set_relay(2, 0)
+            relay_board.set_relay(1, 0)
 
 def conveyor_stop():
     global conveyor_stop_time
@@ -39,7 +39,7 @@ def conveyor_stop():
     relay_board.set_relay(3, 15)
 
     elapsed_time = time.time() - conveyor_stop_time 
-    if elapsed_time >= 30 :
+    if elapsed_time >= 60 :
         conveyor_stop_time=time.time()
         for i in range(2):
             # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
@@ -83,21 +83,10 @@ def control_conveyor(weight1, weight2):
             elif weight1 < 0.0 and weight2 < 0.0:
                 # Stop conveyor if both scales read < 0
                 conveyor_stop()
-            elif weight1 == 0 and weight2 == 0:
-                # Stop conveyor if both scales read < 0
-                #conveyor_stop()
-                #reset(backward)
-                global toggle
-                toggle = True
-                conveyor_reverse()
             elif weight1 == 0 and weight2 > 2:
                 # Start filling the box on the scale that reads 0
                 #reset(forward)
                 conveyor_forward()
-            elif weight1 > 2 and weight2 == 0:
-                # Start filling the box on the scale that reads 0
-                #reset(backward)
-                conveyor_reverse()
             elif weight1 == 0 and weight2 < 0:
                 # move toward box on the scale that reads 0
                 #reset(forward)
@@ -105,6 +94,17 @@ def control_conveyor(weight1, weight2):
             elif weight1 <0 and weight2 ==0:
                 # move towards the box on the scale that reads 0
                 #reset(backward)
+                conveyor_reverse()
+            elif weight1 > 2 and weight2 == 0:
+                # Start filling the box on the scale that reads 0
+                #reset(backward)
+                conveyor_reverse()
+            elif weight1 == 0 and weight2 == 0:
+                # Stop conveyor if both scales read < 0
+                #conveyor_stop()
+                #reset(backward)
+                global toggle
+                toggle = True
                 conveyor_reverse()
             elif weight1 <0 and weight2 >2:
                 # Stop filling the box on the scale that reads >2
