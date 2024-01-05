@@ -197,7 +197,7 @@ def read_serial(port):
                 global w1
                 w1 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
-                control_relay1(w1)
+                #control_relay1(w1)
                 #break
                 
 
