@@ -198,7 +198,7 @@ def read_serial(port):
                 w1 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
                 control_relay1(w1)
-                break
+                #break
                 
 
 def read_serial2(port):
@@ -211,7 +211,7 @@ def read_serial2(port):
                 w2 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
                 control_relay2(w2)
-                break
+                #break
 
 def monitorrelay3():
     if not relay_board.get_relay(1) and not relay_board.get_relay(2):
