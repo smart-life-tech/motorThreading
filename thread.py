@@ -196,15 +196,22 @@ def read_serial2(port):
                 # Relay control logic
                 control_relay2(w2)
 
+def monitorrelay3():
+    if not relay_board.get_relay(1) and not relay_board.get_relay(2):
+        relay_board.set_relay(3, 1)
+    else :
+        relay_board.set_relay(3, 0)
 # Creating threads for each scale
 thread1 = threading.Thread(target=read_serial, args=('/dev/ttySC0',))
 thread2 = threading.Thread(target=read_serial2, args=('/dev/ttySC1',))
-
+thread3=threading.Thread(target=monitorrelay3)
 
 # Starting threads
 thread1.start()
 thread2.start()
+thread3.start()
 
 # Joining threads to the main thread
 thread1.join()
 thread2.join()
+thread3.join()
