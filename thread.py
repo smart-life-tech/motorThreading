@@ -43,10 +43,10 @@ def conveyor_stop():
     relay_board.set_relay(3, 15)
     
     elapsed_time = time.time() - conveyor_stop_time 
-    if elapsed_time >= 45 :
+    if elapsed_time >= 30 :
         conveyor_stop_time=time.time()
         if not secondOrder:
-            while True:
+            for i in range(2):
                 # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
                 relay_board.set_relay(4, 15)
                 time.sleep(2)
@@ -57,7 +57,7 @@ def conveyor_stop():
                 relay_board.set_relay(4, 0)
                 time.sleep(2)
                 secondOrder =True
-                break
+                
         elif secondOrder:
             relay_board.set_relay(4, 15)
         
@@ -67,12 +67,13 @@ def conveyor_forward():
     global conveyor_stop_time
     global secondOrder
     # Turn on relay 1 for forward movement
-    relay_board.set_relay(2, 0)
     relay_board.set_relay(1, 15)
+    relay_board.set_relay(2, 0)
     relay_board.set_relay(3, 0)
     relay_board.set_relay(2, 0)
     relay_board.set_relay(4, 0)
     relay_board.set_relay(3, 0)
+    relay_board.set_relay(2, 0)
     #relay_board.set_all_relays(8)
     secondOrder =False
     conveyor_stop_time = time.time()
@@ -87,6 +88,7 @@ def conveyor_reverse():
     relay_board.set_relay(1, 0)
     relay_board.set_relay(4, 0)
     relay_board.set_relay(3, 0)
+    relay_board.set_relay(1, 0)
     #relay_board.set_all_relays(4)
     secondOrder =False
     conveyor_stop_time = time.time()
