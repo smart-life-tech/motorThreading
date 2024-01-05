@@ -39,7 +39,7 @@ def conveyor_stop():
     relay_board.set_relay(3, 15)
 
     elapsed_time = time.time() - conveyor_stop_time 
-    if elapsed_time >= 60 :
+    if elapsed_time >= 45 :
         conveyor_stop_time=time.time()
         for i in range(2):
             # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
@@ -80,6 +80,12 @@ def control_conveyor(weight1, weight2):
                 # Stop conveyor if either box weighs >= 2
                 conveyor_stop()
                 #print("greatr than 2")
+            elif weight1 <0 and weight2 >2:
+                # Stop filling the box on the scale that reads >2
+                conveyor_stop()
+            elif weight1 >2 and weight2 <0:
+                # Stop filling the box on the scale that reads >2
+                conveyor_stop()
             elif weight1 < 0.0 and weight2 < 0.0:
                 # Stop conveyor if both scales read < 0
                 conveyor_stop()
@@ -106,12 +112,7 @@ def control_conveyor(weight1, weight2):
                 global toggle
                 toggle = True
                 conveyor_reverse()
-            elif weight1 <0 and weight2 >2:
-                # Stop filling the box on the scale that reads >2
-                conveyor_stop()
-            elif weight1 >2 and weight2 <0:
-                # Stop filling the box on the scale that reads >2
-                conveyor_stop()
+            
             
     except Exception as e:
         print("Error in conveyor control:", e)
