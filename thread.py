@@ -72,6 +72,7 @@ def conveyor_forward():
     relay_board.set_relay(3, 0)
     relay_board.set_relay(2, 0)
     relay_board.set_relay(4, 0)
+    relay_board.set_relay(3, 0)
     #relay_board.set_all_relays(8)
     secondOrder =False
     conveyor_stop_time = time.time()
@@ -85,6 +86,7 @@ def conveyor_reverse():
     relay_board.set_relay(3, 0)
     relay_board.set_relay(1, 0)
     relay_board.set_relay(4, 0)
+    relay_board.set_relay(3, 0)
     #relay_board.set_all_relays(4)
     secondOrder =False
     conveyor_stop_time = time.time()
