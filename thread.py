@@ -132,6 +132,7 @@ def control_conveyor(weight1, weight2):
 
 def control_relay1(weight):
     #time.sleep(5)
+    global w1,w2
     try:
         if weight is not None:
             '''
@@ -154,6 +155,7 @@ def control_relay1(weight):
 
 def control_relay2(weight):# all these section is same as using weight 2
     #time.sleep(5)
+    global w1,w2
     try:
         if weight is not None:
             '''
@@ -195,7 +197,7 @@ def read_serial(port):
                 global w1
                 w1 = extract_weight(data.decode('utf-8','ignore').strip())
                 # Relay control logic
-                #control_relay1(w1)
+                control_relay1(w1)
                 break
                 
 
