@@ -46,17 +46,18 @@ def conveyor_stop():
     if elapsed_time >= 45 :
         conveyor_stop_time=time.time()
         if not secondOrder:
-            
-            # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
-            relay_board.set_relay(4, 15)
-            time.sleep(2)
-            relay_board.set_relay(4, 0)
-            time.sleep(2)
-            relay_board.set_relay(4, 15)
-            time.sleep(2)
-            relay_board.set_relay(4, 0)
-            time.sleep(2)
-            secondOrder =True
+            while True:
+                # Turn on relay 4 for 2 seconds, then off for 2 seconds, and on again for 2 seconds
+                relay_board.set_relay(4, 15)
+                time.sleep(2)
+                relay_board.set_relay(4, 0)
+                time.sleep(2)
+                relay_board.set_relay(4, 15)
+                time.sleep(2)
+                relay_board.set_relay(4, 0)
+                time.sleep(2)
+                secondOrder =True
+                break
         elif secondOrder:
             relay_board.set_relay(4, 15)
         
