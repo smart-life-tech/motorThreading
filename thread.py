@@ -88,7 +88,7 @@ def conveyor_reverse():
     relay_board.set_relay(1, 0)
     relay_board.set_relay(4, 0)
     relay_board.set_relay(3, 0)
-    relay_board.set_relay(1, 0)
+    relay_board.set_relay(1, 0)##  i needed to call the off multiple times for it to be registered
     #relay_board.set_all_relays(4)
     secondOrder =False
     conveyor_stop_time = time.time()
