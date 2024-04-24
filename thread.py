@@ -104,6 +104,13 @@ def control_conveyor(weight1, weight2):
             elif weight1 <0 and weight2 >2:
                 # Stop filling the box on the scale that reads >2
                 conveyor_stop()
+            elif weight1 > 0 and weight2 >=2:
+                # Stop filling the box on the scale that reads >2
+                conveyor_stop()
+                
+            elif weight1 >=2 and weight2 >0:
+                # Stop filling the box on the scale that reads >2
+                conveyor_stop()
             elif weight1 >2 and weight2 <0:
                 # Stop filling the box on the scale that reads >2
                 conveyor_stop()
