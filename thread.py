@@ -92,6 +92,10 @@ def conveyor_reverse():
     #relay_board.set_all_relays(4)
     secondOrder =False
     conveyor_stop_time = time.time()
+# I need the conveyor to stop moving instead of switching directions when one scale reads 
+# 50 and the other shows anything over 0, however, once the conveyor switches directions it 
+# should only stop if/when both scales read 50
+
 
 def control_conveyor(weight1, weight2):
     try:
